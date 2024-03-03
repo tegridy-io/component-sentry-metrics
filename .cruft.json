@@ -1,0 +1,25 @@
+{
+  "template": "https://github.com/projectsyn/commodore-component-template.git",
+  "commit": "6b36e5a2cff7a53ad4380a4c2b19b2bb6fbb524b",
+  "checkout": "main",
+  "context": {
+    "cookiecutter": {
+      "name": "Sentry Platform Metrics",
+      "slug": "sentry-metrics",
+      "parameter_key": "sentry_metrics",
+      "test_cases": "defaults",
+      "add_lib": "n",
+      "add_pp": "n",
+      "add_golden": "y",
+      "add_matrix": "y",
+      "add_go_unit": "n",
+      "copyright_holder": "VSHN AG <info@vshn.ch>",
+      "copyright_year": "2024",
+      "github_owner": "tegridy-io",
+      "github_name": "component-sentry-metrics",
+      "github_url": "https://github.com/tegridy-io/component-sentry-metrics",
+      "_template": "https://github.com/projectsyn/commodore-component-template.git"
+    }
+  },
+  "directory": null
+}

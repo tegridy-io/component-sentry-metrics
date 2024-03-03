@@ -1,0 +1,4 @@
+parameters:
+  sentry_metrics:
+    =_metadata: {}
+    namespace: syn-sentry-metrics
