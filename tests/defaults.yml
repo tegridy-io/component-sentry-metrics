@@ -1,3 +1,6 @@
-# Overwrite parameters here
-
-# parameters: {...}
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/tegridy-io/component-sentry-operators/feat/support-creating-cr/lib/sentry-operators.libsonnet
+        output_path: vendor/lib/sentry-operators.libsonnet

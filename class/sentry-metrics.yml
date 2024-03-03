@@ -1,5 +1,12 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: helm
+        source: ${sentry_metrics:charts:mimir:source}
+        chart_name: mimir-distributed
+        version: ${sentry_metrics:charts:mimir:version}
+        output_path: ${_base_directory}/helmcharts/mimir/${sentry_metrics:charts:mimir:version}
+
     compile:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet
@@ -9,3 +16,25 @@ parameters:
           - ${_base_directory}/component/main.jsonnet
         input_type: jsonnet
         output_path: sentry-metrics/
+      # --- Remove
+      - input_paths:
+          - ${_base_directory}/helmcharts/mimir/${sentry_metrics:charts:mimir:version}/templates/minio
+        input_type: remove
+        output_path: .
+      # --- Helm
+      - input_paths:
+          - ${_base_directory}/component/helm.jsonnet
+        input_type: jsonnet
+        output_path: ${_base_directory}/helmcharts/mimir/${sentry_metrics:charts:mimir:version}/
+      - input_type: helm
+        output_type: yaml
+        input_paths:
+          - ${_base_directory}/helmcharts/mimir/${sentry_metrics:charts:mimir:version}
+        output_path: sentry-metrics/10_helmchart
+        helm_values: ${sentry_metrics:helmValues}
+        helm_values_files:
+          - ${_base_directory}/helmcharts/mimir/${sentry_metrics:charts:mimir:version}/values-components.yaml
+          - ${_base_directory}/helmcharts/mimir/${sentry_metrics:charts:mimir:version}/values-others.yaml
+        helm_params:
+          name: mimir
+          namespace: ${sentry_metrics:namespace:name}

@@ -1,0 +1,12 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  labels:
+    app.kubernetes.io/instance: mimir
+    app.kubernetes.io/managed-by: commodore
+    app.kubernetes.io/name: sentry-mimir-blockstore
+  name: sentry-mimir-blockstore
+  namespace: syn-sentry-metrics
+spec:
+  bucketName: sentry-mimir-blockstore
+  storageClassName: ''
