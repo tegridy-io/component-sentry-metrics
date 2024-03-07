@@ -1,4 +1,106 @@
 parameters:
   sentry_metrics:
     =_metadata: {}
-    namespace: syn-sentry-metrics
+
+    # --- Component configuration ----------------------------------------------
+
+    namespace:
+      annotations: {}
+      labels: {}
+      name: syn-sentry-metrics
+
+    charts:
+      mimir:
+        source: https://grafana.github.io/helm-charts
+        version: 4.3.0
+
+    global:
+      storageClass: ''
+      objectClass: ''
+      bucketName: sentry-mimir-blockstore
+      bucketRegion: ''
+      bucketEndpoint: ''
+      bucketInsecure: false
+
+    config:
+      common:
+        storage:
+          backend: s3
+          s3:
+            endpoint: ${sentry_metrics:global:bucketEndpoint}
+            region: ${sentry_metrics:global:bucketRegion}
+            bucket_name: ${sentry_metrics:global:bucketName}
+            insecure: ${sentry_metrics:global:bucketInsecure}
+            access_key_id: \${AWS_ACCESS_KEY_ID}
+            secret_access_key: \${AWS_SECRET_ACCESS_KEY}
+      tenant_federation:
+        enabled: true
+      ruler:
+        tenant_federation:
+          enabled: true
+
+      ## -- HA Tracker not needed currently ---
+      # limits:
+      #   accept_ha_samples: true
+      #   ha_cluster_label: cluster_id
+      #   ha_replica_label: prometheus_replica
+      # distributor:
+      #   ha_tracker:
+      #     enable_ha_tracker: true
+      #     ha_tracker_failover_timeout: 60s
+      #     kvstore:
+      #       store: etcd
+      ## --------------------------------------
+
+    ingress:
+      enabled: false
+      tls: true
+      url: mimir.local
+      annotations: {}
+
+    # -- Subcomponents ---------------------------------------------------------
+
+    components:
+      querier:
+        replicas: 2
+        resources: {}
+      queryFrontend:
+        replicas: 1
+        resources: {}
+      storeGateway:
+        replicas: 1
+        resources: {}
+
+      distributor:
+        replicas: 1
+        resources: {}
+      ingester:
+        replicas: 3
+        resources: {}
+
+      compactor:
+        replicas: 1
+        resources: {}
+
+      gateway:
+        replicas: 1
+        resources: {}
+
+      # -- Optional Subcomponents ----------------------------------------------
+
+      ruler:
+        enabled: false
+        replicas: 1
+        resources: {}
+      queryScheduler:
+        enabled: false
+        replicas: 2
+        resources: {}
+      alertmanager:
+        enabled: false
+        replicas: 1
+        resources: {}
+
+    # --- Helm overrides -------------------------------------------------------
+
+    helmValues: {}
